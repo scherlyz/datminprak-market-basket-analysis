@@ -1,0 +1,188 @@
+[
+    {
+        "barang_utama": "SINGLE HEART ZINC T-LIGHT HOLDER",
+        "rekomendasi": "HANGING HEART ZINC T-LIGHT HOLDER",
+        "confidence": 0.63,
+        "lift": 13.69
+    },
+    {
+        "barang_utama": "HANGING HEART ZINC T-LIGHT HOLDER",
+        "rekomendasi": "SINGLE HEART ZINC T-LIGHT HOLDER",
+        "confidence": 0.44,
+        "lift": 13.69
+    },
+    {
+        "barang_utama": "VINTAGE HEADS AND TAILS CARD GAME",
+        "rekomendasi": "VINTAGE SNAP CARDS",
+        "confidence": 0.63,
+        "lift": 13.07
+    },
+    {
+        "barang_utama": "VINTAGE SNAP CARDS",
+        "rekomendasi": "VINTAGE HEADS AND TAILS CARD GAME",
+        "confidence": 0.45,
+        "lift": 13.07
+    },
+    {
+        "barang_utama": "WOODEN PICTURE FRAME WHITE FINISH",
+        "rekomendasi": "WOODEN FRAME ANTIQUE WHITE",
+        "confidence": 0.64,
+        "lift": 11.42
+    },
+    {
+        "barang_utama": "WOODEN FRAME ANTIQUE WHITE",
+        "rekomendasi": "WOODEN PICTURE FRAME WHITE FINISH",
+        "confidence": 0.53,
+        "lift": 11.42
+    },
+    {
+        "barang_utama": "CHOCOLATE HOT WATER BOTTLE",
+        "rekomendasi": "HOT WATER BOTTLE TEA AND SYMPATHY",
+        "confidence": 0.51,
+        "lift": 10.49
+    },
+    {
+        "barang_utama": "HOT WATER BOTTLE TEA AND SYMPATHY",
+        "rekomendasi": "CHOCOLATE HOT WATER BOTTLE",
+        "confidence": 0.48,
+        "lift": 10.49
+    },
+    {
+        "barang_utama": "SWEETHEART CERAMIC TRINKET BOX",
+        "rekomendasi": "STRAWBERRY CERAMIC TRINKET BOX",
+        "confidence": 0.79,
+        "lift": 10.07
+    },
+    {
+        "barang_utama": "STRAWBERRY CERAMIC TRINKET BOX",
+        "rekomendasi": "SWEETHEART CERAMIC TRINKET BOX",
+        "confidence": 0.49,
+        "lift": 10.07
+    },
+    {
+        "barang_utama": "HEART OF WICKER SMALL",
+        "rekomendasi": "HEART OF WICKER LARGE",
+        "confidence": 0.54,
+        "lift": 9.77
+    },
+    {
+        "barang_utama": "HEART OF WICKER LARGE",
+        "rekomendasi": "HEART OF WICKER SMALL",
+        "confidence": 0.5,
+        "lift": 9.77
+    },
+    {
+        "barang_utama": "LUNCH BAG SUKI  DESIGN",
+        "rekomendasi": "LUNCH BAG SPACEBOY DESIGN",
+        "confidence": 0.43,
+        "lift": 9.49
+    },
+    {
+        "barang_utama": "LUNCH BAG SPACEBOY DESIGN",
+        "rekomendasi": "LUNCH BAG SUKI  DESIGN",
+        "confidence": 0.5,
+        "lift": 9.49
+    },
+    {
+        "barang_utama": "LUNCH BAG PINK RETROSPOT",
+        "rekomendasi": "LUNCH BAG RED SPOTTY",
+        "confidence": 0.52,
+        "lift": 9.32
+    },
+    {
+        "barang_utama": "72 SWEETHEART FAIRY CAKE CASES",
+        "rekomendasi": "60 TEATIME FAIRY CAKE CASES",
+        "confidence": 0.54,
+        "lift": 8.79
+    },
+    {
+        "barang_utama": "PACK OF 60 PINK PAISLEY CAKE CASES",
+        "rekomendasi": "60 TEATIME FAIRY CAKE CASES",
+        "confidence": 0.51,
+        "lift": 8.28
+    },
+    {
+        "barang_utama": "60 TEATIME FAIRY CAKE CASES",
+        "rekomendasi": "PACK OF 60 PINK PAISLEY CAKE CASES",
+        "confidence": 0.44,
+        "lift": 8.28
+    },
+    {
+        "barang_utama": "LOVE BUILDING BLOCK WORD",
+        "rekomendasi": "HOME BUILDING BLOCK WORD",
+        "confidence": 0.54,
+        "lift": 8.16
+    },
+    {
+        "barang_utama": "HOME BUILDING BLOCK WORD",
+        "rekomendasi": "LOVE BUILDING BLOCK WORD",
+        "confidence": 0.45,
+        "lift": 8.16
+    },
+    {
+        "barang_utama": "JUMBO BAG STRAWBERRY",
+        "rekomendasi": "JUMBO STORAGE BAG SUKI",
+        "confidence": 0.44,
+        "lift": 7.59
+    },
+    {
+        "barang_utama": "LUNCH BAG SUKI  DESIGN",
+        "rekomendasi": "LUNCH BAG  BLACK SKULL.",
+        "confidence": 0.4,
+        "lift": 7.37
+    },
+    {
+        "barang_utama": "PACK OF 60 PINK PAISLEY CAKE CASES",
+        "rekomendasi": "PACK OF 72 RETRO SPOT CAKE CASES",
+        "confidence": 0.46,
+        "lift": 7.28
+    },
+    {
+        "barang_utama": "LUNCH BAG  BLACK SKULL.",
+        "rekomendasi": "LUNCH BAG RED SPOTTY",
+        "confidence": 0.41,
+        "lift": 7.28
+    },
+    {
+        "barang_utama": "PACK OF 72 RETRO SPOT CAKE CASES",
+        "rekomendasi": "60 TEATIME FAIRY CAKE CASES",
+        "confidence": 0.44,
+        "lift": 7.12
+    },
+    {
+        "barang_utama": "60 TEATIME FAIRY CAKE CASES",
+        "rekomendasi": "PACK OF 72 RETRO SPOT CAKE CASES",
+        "confidence": 0.45,
+        "lift": 7.12
+    },
+    {
+        "barang_utama": "RED HANGING HEART T-LIGHT HOLDER",
+        "rekomendasi": "WHITE HANGING HEART T-LIGHT HOLDER",
+        "confidence": 0.72,
+        "lift": 4.44
+    },
+    {
+        "barang_utama": "WOODEN PICTURE FRAME WHITE FINISH",
+        "rekomendasi": "WHITE HANGING HEART T-LIGHT HOLDER",
+        "confidence": 0.49,
+        "lift": 3.02
+    },
+    {
+        "barang_utama": "WOODEN FRAME ANTIQUE WHITE",
+        "rekomendasi": "WHITE HANGING HEART T-LIGHT HOLDER",
+        "confidence": 0.47,
+        "lift": 2.91
+    },
+    {
+        "barang_utama": "LOVE BUILDING BLOCK WORD",
+        "rekomendasi": "WHITE HANGING HEART T-LIGHT HOLDER",
+        "confidence": 0.42,
+        "lift": 2.59
+    },
+    {
+        "barang_utama": "HEART OF WICKER SMALL",
+        "rekomendasi": "WHITE HANGING HEART T-LIGHT HOLDER",
+        "confidence": 0.41,
+        "lift": 2.5
+    }
+]
