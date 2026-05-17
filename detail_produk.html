@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ceramique.co - Toko Keramik & Dekorasi Vintage</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Playfair Display & Plus Jakarta Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['Playfair Display', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Animasi halus untuk loading shimmer */
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        .shimmer-bg {
+            background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite linear;
+        }
+        /* Transisi Halaman */
+        .fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-[#FAF8F5] font-sans text-gray-800 antialiased min-h-screen flex flex-col justify-between">
+
+    <!-- Header / Navigasi Toko -->
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-rose-100/60">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+            <!-- Logo Toko (Klik untuk kembali ke Beranda) -->
+            <div class="flex items-center gap-2 cursor-pointer group" onclick="navigateTo('home')">
+                <span class="text-2xl group-hover:scale-110 transition-transform">🍓</span>
+                <span class="font-serif text-xl font-bold tracking-wide text-rose-800">Ceramique.co</span>
+            </div>
+            
+            <!-- Menu Navigasi -->
+            <nav class="hidden md:flex gap-8 text-sm font-medium">
+                <button onclick="navigateTo('home')" id="nav-home" class="text-rose-600 border-b-2 border-rose-500 pb-1 transition">Beranda</button>
+                <a href="#katalog" onclick="navigateTo('home')" class="text-gray-600 hover:text-rose-600 transition">Katalog</a>
+                <a href="#" class="text-gray-600 hover:text-rose-600 transition">Tentang Kami</a>
+            </nav>
+            
+            <!-- Keranjang Belanja & Notifikasi Ringkas -->
+            <div class="flex items-center gap-4">
+                <div class="relative cursor-pointer" onclick="toggleCartModal()">
+                    <div class="p-2.5 bg-rose-50 rounded-full hover:bg-rose-100 transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-rose-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                        </svg>
+                    </div>
+                    <span id="cart-count" class="absolute -top-1 -right-1 bg-rose-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold shadow-md transform scale-90 transition-transform duration-300">0</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ================= VIEW 1: BERANDA / KATALOG UTAMA ================= -->
+    <div id="view-home" class="fade-in">
+        <!-- Hero Banner Section -->
+        <section class="max-w-6xl mx-auto px-4 pt-6 pb-12">
+            <div class="bg-gradient-to-r from-rose-50 to-amber-50/50 rounded-3xl p-8 md:p-12 border border-rose-100/50 flex flex-col md:flex-row items-center justify-between gap-8">
+                <div class="space-y-4 max-w-lg">
+                    <span class="text-xs font-bold uppercase tracking-widest text-rose-600 bg-rose-100/60 px-3 py-1.5 rounded-full">Koleksi Valid Teranalisis</span>
+                    <h1 class="font-serif text-3xl md:text-5xl font-bold text-gray-900 leading-tight">Keindahan Dekorasi Vintage Berbasis Data Cerdas</h1>
+                    <p class="text-gray-600 text-sm md:text-base">Temukan produk estetik berkualitas tinggi yang terbukti sering dibeli bersama oleh ribuan pelanggan retail internasional.</p>
+                    <a href="#katalog" class="inline-block bg-rose-600 hover:bg-rose-700 text-white font-bold px-6 py-3 rounded-xl shadow-md transition text-sm">Jelajahi Katalog</a>
+                </div>
+                <div class="hidden md:block w-72 h-72">
+                    <!-- Ilustrasi Banner -->
+                    <svg viewBox="0 0 200 200" class="w-full h-full drop-shadow-lg">
+                        <ellipse cx="100" cy="150" rx="70" ry="20" fill="#E11D48" opacity="0.05" />
+                        <path d="M70,70 Q100,20 130,70 T100,160 Z" fill="#FDA4AF" opacity="0.8"/>
+                        <path d="M100,50 C120,50 140,80 120,130 C110,150 90,150 80,130 C60,80 80,50 100,50 Z" fill="#E11D48" />
+                        <circle cx="100" cy="40" r="12" fill="#16A34A" />
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- Katalog Produk Section -->
+        <section id="katalog" class="max-w-6xl mx-auto px-4 py-8 scroll-mt-24">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-2 mb-8">
+                <div>
+                    <h2 class="font-serif text-2xl md:text-3xl font-bold text-gray-900">Katalog Produk Terpopuler</h2>
+                    <p class="text-gray-500 text-sm">Klik salah satu produk di bawah untuk menguji keakuratan rekomendasi asosiasi pasar riil Anda.</p>
+                </div>
+                <div class="text-xs text-rose-600 bg-rose-50 px-3 py-1.5 rounded-lg border border-rose-100 font-medium">
+                    ✨ Klik produk untuk menguji algoritma Market Basket Analysis
+                </div>
+            </div>
+
+            <!-- Grid Produk -->
+            <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Produk akan dimasukkan secara dinamis oleh JavaScript -->
+            </div>
+        </section>
+    </div>
+
+    <!-- ================= VIEW 2: DETAIL PRODUK (DINAMIS) ================= -->
+    <div id="view-detail" class="fade-in hidden">
+        <main class="max-w-6xl mx-auto px-4 py-8 md:py-12 w-full">
+            <!-- Breadcrumbs / Tombol Kembali -->
+            <button onclick="navigateTo('home')" class="mb-6 flex items-center gap-2 text-sm text-gray-500 hover:text-rose-600 font-medium transition group">
+                <span class="transform group-hover:-translate-x-1 transition-transform">←</span> Kembali ke Beranda
+            </button>
+
+            <!-- Detail Box Utama -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start bg-white p-6 md:p-10 rounded-3xl shadow-sm border border-rose-50/50">
+                
+                <!-- Kolom Kiri: Foto Produk Utama Dinamis -->
+                <div class="space-y-4 w-full">
+                    <div class="aspect-square w-full rounded-2xl bg-rose-50/30 border border-rose-100 overflow-hidden flex items-center justify-center p-8 shadow-inner relative group">
+                        <span class="absolute top-4 left-4 bg-rose-600 text-white text-xs font-bold px-3 py-1.5 rounded-full tracking-wider uppercase shadow-sm">Koleksi Terpilih</span>
+                        <!-- Wadah SVG Produk yang Berubah Sesuai Pilihan -->
+                        <div id="detail-product-image" class="w-72 h-72 flex items-center justify-center">
+                            <!-- SVG dimasukkan dinamis lewat JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kolom Kanan: Informasi Produk Dinamis -->
+                <div class="space-y-6 w-full">
+                    <div>
+                        <p id="detail-product-category" class="text-xs font-semibold tracking-widest text-rose-600 uppercase mb-1">Handmade Ceramic</p>
+                        <h1 id="detail-product-title" class="font-serif text-3xl md:text-4xl font-bold text-gray-900 leading-tight">NAMA PRODUK</h1>
+                        
+                        <div class="flex items-center gap-2 mt-3">
+                            <div class="flex text-amber-400">
+                                <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                            </div>
+                            <span class="text-xs text-gray-500 font-medium">(Ulasan berdasarkan transaksi retail historis)</span>
+                        </div>
+                    </div>
+
+                    <!-- Harga Utama -->
+                    <div class="border-y border-rose-50 py-4 flex items-baseline gap-3">
+                        <span id="detail-product-price" class="text-3xl font-bold text-rose-700">Rp 0</span>
+                        <span id="detail-product-strike-price" class="text-sm text-gray-400 line-through">Rp 0</span>
+                        <span class="bg-rose-100 text-rose-800 text-xs font-bold px-2 py-0.5 rounded-md">Pilihan Terbaik</span>
+                    </div>
+
+                    <!-- Deskripsi Singkat -->
+                    <p id="detail-product-description" class="text-gray-600 leading-relaxed text-sm md:text-base">
+                        Deskripsi produk...
+                    </p>
+
+                    <!-- Pilihan Jumlah & Tombol Beli -->
+                    <div class="space-y-4 pt-2">
+                        <div class="flex items-center gap-4">
+                            <label class="text-sm font-semibold text-gray-700">Jumlah:</label>
+                            <div class="flex items-center border border-gray-300 rounded-lg overflow-hidden bg-gray-50">
+                                <button onclick="updateQty(-1)" class="px-3 py-1.5 hover:bg-gray-200 transition text-lg font-semibold">-</button>
+                                <span id="product-qty" class="px-5 py-1.5 font-bold text-gray-800">1</span>
+                                <button onclick="updateQty(1)" class="px-3 py-1.5 hover:bg-gray-200 transition text-lg font-semibold">+</button>
+                            </div>
+                        </div>
+
+                        <!-- Tombol Aksi Beli -->
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <button id="btn-add-to-cart" class="flex-1 bg-rose-600 hover:bg-rose-700 active:bg-rose-800 text-white font-bold py-4 px-6 rounded-xl transition duration-300 shadow-md shadow-rose-600/20 flex items-center justify-center gap-2 text-base">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                                </svg>
+                                Masukkan Keranjang
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Fitur Nilai Tambahan -->
+                    <div class="grid grid-cols-3 gap-4 pt-4 border-t border-rose-50 text-center text-xs text-gray-500">
+                        <div class="p-2">
+                            <span class="block text-lg mb-1">🏺</span>
+                            <strong>Material Premium</strong>
+                        </div>
+                        <div class="p-2">
+                            <span class="block text-lg mb-1">✨</span>
+                            <strong>Desain Klasik</strong>
+                        </div>
+                        <div class="p-2">
+                            <span class="block text-lg mb-1">🎁</span>
+                            <strong>Proteksi Ekstra</strong>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- SEKSI REKOMENDASI PRODUK DINAMIS (CROSS-SELLING) -->
+            <section class="mt-12 md:mt-16 bg-white p-6 md:p-10 rounded-3xl shadow-sm border border-rose-50/50">
+                <h2 class="font-serif text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+                    Pelanggan yang membeli ini, juga membeli:
+                </h2>
+                <p class="text-xs md:text-sm text-gray-500 mb-8 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> 
+                    Rekomendasi otomatis berbasis data keterkaitan keranjang belanja (*Market Basket Analysis*).
+                </p>
+
+                <!-- Wadah Hasil Rekomendasi -->
+                <div id="recommendations-container" class="relative">
+                    <!-- Shimmer Loading -->
+                    <div id="rec-loading" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                        <div class="border border-rose-50 p-4 rounded-2xl space-y-4">
+                            <div class="shimmer-bg aspect-square rounded-xl w-full"></div>
+                            <div class="shimmer-bg h-4 rounded w-3/4"></div>
+                            <div class="shimmer-bg h-6 rounded w-1/2"></div>
+                            <div class="shimmer-bg h-10 rounded w-full"></div>
+                        </div>
+                    </div>
+
+                    <!-- List Rekomendasi Dinamis -->
+                    <div id="rec-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 hidden">
+                        <!-- Komponen rekomendasi dimasukkan secara dinamis lewat JS -->
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 text-sm py-12 border-t border-gray-800 mt-16">
+        <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-center md:text-left">
+                <p class="font-serif text-white font-bold text-lg mb-1">🍓 Ceramique.co</p>
+                <p class="text-xs text-gray-500">Platform simulasi asosiasi produk keranjang belanja modern.</p>
+            </div>
+            <p class="text-xs">&copy; 2026 Ceramique.co. Hak Cipta Dilindungi Undang-Undang.</p>
+            <div class="flex gap-6 text-xs">
+                <a href="#" class="hover:underline">Syarat & Ketentuan</a>
+                <a href="#" class="hover:underline">Kebijakan Privasi</a>
+                <a href="#" class="hover:underline">Bantuan</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Panel Informasi / Debugger Sederhana untuk Keperluan Demo -->
+    <div class="fixed bottom-4 right-4 z-50">
+        <button onclick="toggleDebugPanel()" class="bg-slate-800 text-white text-xs font-mono font-semibold px-3 py-2.5 rounded-lg shadow-lg hover:bg-slate-700 transition flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" id="api-status-dot"></span>
+            Monitor API MBA
+        </button>
+        <!-- Panel Debug Konten -->
+        <div id="debug-panel" class="hidden absolute bottom-12 right-0 w-96 bg-slate-900 text-slate-200 p-4 rounded-xl shadow-2xl border border-slate-700 font-mono text-xs space-y-2">
+            <h4 class="font-bold border-b border-slate-700 pb-1.5 text-rose-400 flex justify-between">
+                <span>Status API Analisis Keranjang</span>
+                <span class="text-[10px] text-slate-400">Aturan Asosiasi Riil</span>
+            </h4>
+            <div class="space-y-1">
+                <p class="text-slate-400">Target URL:</p>
+                <p id="debug-url" class="text-blue-400 break-all text-[10px] bg-slate-950 p-1.5 rounded"></p>
+                <p>Status: <span id="debug-status" class="text-yellow-400">Menghubungkan...</span></p>
+                <p class="text-rose-300 font-semibold">Metrik Asosiasi Pendukung:</p>
+                <div class="grid grid-cols-2 gap-2 bg-slate-950 p-2 rounded text-[11px] text-gray-300">
+                    <div>Confidence: <span id="debug-confidence" class="text-amber-400 font-bold">-</span></div>
+                    <div>Lift Ratio: <span id="debug-lift" class="text-cyan-400 font-bold">-</span></div>
+                </div>
+                <p class="text-slate-400 pt-1">Payload Respons:</p>
+                <pre id="debug-json" class="bg-slate-950 p-2 rounded text-[10px] overflow-y-auto text-emerald-400 max-h-36">{}</pre>
+            </div>
+            <p class="text-[9px] text-slate-400 leading-relaxed pt-1.5 border-t border-slate-800">
+                Data di atas diambil langsung berdasarkan kecocokan aturan komputasi MBA di dalam dataset online retail yang sesungguhnya.
+            </p>
+        </div>
+    </div>
+
+    <!-- Toast Notifikasi Kustom -->
+    <div id="toast" class="fixed top-24 right-4 z-50 transform translate-x-[400px] transition-transform duration-300 ease-out hidden">
+        <div class="bg-slate-900 text-white px-5 py-4 rounded-xl shadow-2xl border border-slate-800 flex items-center gap-3">
+            <span class="text-xl">🛒</span>
+            <div>
+                <p class="font-bold text-sm" id="toast-title">Produk ditambahkan!</p>
+                <p class="text-xs text-gray-400" id="toast-desc">Produk berhasil masuk keranjang.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Ringkasan Keranjang Belanja -->
+    <div id="cart-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl border border-rose-50 space-y-6">
+            <div class="flex justify-between items-center border-b border-gray-100 pb-4">
+                <h3 class="font-serif text-xl font-bold text-gray-900 flex items-center gap-2">🛒 Keranjang Belanja Anda</h3>
+                <button onclick="toggleCartModal()" class="text-gray-400 hover:text-gray-600 font-bold text-lg">&times;</button>
+            </div>
+            <div id="cart-items" class="space-y-4 max-h-60 overflow-y-auto pr-1">
+                <!-- List Keranjang dimasukkan dinamis -->
+            </div>
+            <div class="border-t border-gray-100 pt-4 space-y-4">
+                <div class="flex justify-between font-bold text-gray-900">
+                    <span>Total Estimasi:</span>
+                    <span id="cart-total">Rp 0</span>
+                </div>
+                <button onclick="checkout()" class="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-3 rounded-xl transition">
+                    Lanjutkan ke Pembayaran
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= SCRIPT UTAMA JAVASCRIPT ================= -->
+    <script>
+        // --- DATA PRODUK TOKO (DATABASE FRONTEND SESUAI HASIL JSON MBA ANDA) ---
+        const productsDb = {
+            "strawberry": {
+                id: "strawberry",
+                name: "STRAWBERRY CERAMIC TRINKET BOX",
+                price: 85000,
+                strikePrice: 120000,
+                category: "Wadah Keramik",
+                description: "Simpan aksesoris kesayangan Anda di dalam wadah keramik berbentuk stroberi buatan tangan ini. Dilapisi dengan lapisan kaca mengkilap (glazed finish) yang mewah serta detail lukisan kuas tangan yang sangat rapi.",
+                svg: `
+                    <svg viewBox="0 0 200 200" class="w-full h-full drop-shadow-xl transform group-hover:scale-105 transition duration-500">
+                        <ellipse cx="100" cy="180" rx="55" ry="12" fill="#000" opacity="0.08"/>
+                        <path d="M100,45 C150,45 165,100 150,145 C138,175 115,185 100,185 C85,185 62,175 50,145 C35,100 50,45 100,45 Z" fill="#E11D48" />
+                        <path d="M70,70 Q60,95 65,120" stroke="#FFF" stroke-width="5" stroke-linecap="round" fill="none" opacity="0.4"/>
+                        <path d="M100,45 C100,45 115,30 135,40 Q120,50 100,45 Z" fill="#16A34A" />
+                        <path d="M100,45 C100,45 85,30 65,40 Q80,50 100,45 Z" fill="#16A34A" />
+                        <path d="M100,50 L100,25" stroke="#15803D" stroke-width="6" stroke-linecap="round"/>
+                        <g fill="#FCD34D" opacity="0.9">
+                            <ellipse cx="100" cy="75" rx="2" ry="4" transform="rotate(-10 100 75)"/>
+                            <ellipse cx="80" cy="85" rx="2" ry="4" transform="rotate(-15 80 85)"/>
+                            <ellipse cx="120" cy="85" rx="2" ry="4" transform="rotate(5 120 85)"/>
+                            <ellipse cx="65" cy="105" rx="2" ry="4" transform="rotate(-20 65 105)"/>
+                            <ellipse cx="100" cy="105" rx="2" ry="4" transform="rotate(-5 100 105)"/>
+                            <ellipse cx="135" cy="105" rx="2" ry="4" transform="rotate(15 135 105)"/>
+                            <ellipse cx="80" cy="130" rx="2" ry="4" transform="rotate(-10 80 130)"/>
+                            <ellipse cx="120" cy="130" rx="2" ry="4" transform="rotate(10 120 130)"/>
+                            <ellipse cx="100" cy="155" rx="2" ry="4" transform="rotate(-5 100 155)"/>
+                        </g>
+                    </svg>
+                `
+            },
+            "sweetheart": {
+                id: "sweetheart",
+                name: "SWEETHEART CERAMIC TRINKET BOX",
+                price: 95000,
+                strikePrice: 130000,
+                category: "Wadah Keramik",
+                description: "Sebuah wadah berbentuk hati merah muda yang romantis dan lembut. Sangat cocok diletakkan bersandingan dengan versi Stroberi di atas meja rias Anda untuk menaruh cincin dan kalung.",
+                svg: `
+                    <svg viewBox="0 0 200 200" class="w-full h-full drop-shadow-xl transform group-hover:scale-105 transition duration-500">
+                        <ellipse cx="100" cy="170" rx="50" ry="10" fill="#000" opacity="0.06"/>
+                        <path d="M100,55 C100,55 120,25 150,35 C180,45 180,85 150,115 L100,165 L50,115 C20,85 20,45 50,35 C80,25 100,55 100,55 Z" fill="#FDA4AF" />
+                        <path d="M70,50 Q55,70 65,100" stroke="#FFF" stroke-width="4" stroke-linecap="round" fill="none" opacity="0.4"/>
+                        <circle cx="100" cy="85" r="10" fill="#E11D48" />
+                        <circle cx="95" cy="82" r="6" fill="#F43F5E" />
+                        <circle cx="105" cy="82" r="6" fill="#F43F5E" />
+                    </svg>
+                `
+            },
+            "single_heart_holder": {
+                id: "single_heart_holder",
+                name: "SINGLE HEART ZINC T-LIGHT HOLDER",
+                price: 59000,
+                strikePrice: 85000,
+                category: "Dekorasi Rumah",
+                description: "Wadah lilin aromaterapi berbahan seng industrial (zinc) yang dipahat dengan ornamen pola satu hati cantik di tengahnya. Memberikan efek pendaran cahaya lilin yang hangat dan syahdu.",
+                svg: `
+                    <svg viewBox="0 0 200 200" class="w-full h-full drop-shadow-xl transform group-hover:scale-105 transition duration-500">
+                        <ellipse cx="100" cy="175" rx="55" ry="12" fill="#000" opacity="0.1"/>
+                        <!-- Badan Logam Seng -->
+                        <rect x="60" y="60" width="80" height="100" rx="10" fill="#64748B" stroke="#475569" stroke-width="4"/>
+                        <!-- Efek Logam Sikat -->
+                        <line x1="70" y1="70" x2="130" y2="70" stroke="#94A3B8" stroke-width="2" opacity="0.5"/>
+                        <line x1="70" y1="150" x2="130" y2="150" stroke="#475569" stroke-width="2" opacity="0.5"/>
+                        <!-- Lubang Pola Hati di Tengah -->
+                        <path d="M100,120 C100,120 110,105 120,110 C130,115 130,130 120,140 L100,155 L80,140 C70,130 70,115 80,110 C90,105 100,120 100,120 Z" fill="#FAF8F5" stroke="#E2E8F0" stroke-width="2"/>
+                        <!-- Cahaya Lilin di Dalam Wadah -->
+                        <circle cx="100" cy="130" r="12" fill="#F59E0B" opacity="0.8" class="animate-pulse"/>
+                        <circle cx="100" cy="130" r="6" fill="#FFFBEB" opacity="0.9"/>
+                    </svg>
+                `
+            },
+            "hanging_heart_holder": {
+                id: "hanging_heart_holder",
+                name: "HANGING HEART ZINC T-LIGHT HOLDER",
+                price: 69000,
+                strikePrice: 95000,
+                category: "Dekorasi Rumah",
+                description: "Versi gantung eksklusif dari wadah lilin seng bermotif hati kami. Dilengkapi rantai baja dan gantungan antik, ideal untuk dipajang di teras rumah, taman, atau dekorasi pesta pernikahan bernuansa rustic.",
+                svg: `
+                    <svg viewBox="0 0 200 200" class="w-full h-full drop-shadow-xl transform group-hover:scale-105 transition duration-500">
+                        <ellipse cx="100" cy="180" rx="45" ry="8" fill="#000" opacity="0.08"/>
+                        <!-- Rantai Gantungan -->
+                        <line x1="100" y1="10" x2="100" y2="60" stroke="#475569" stroke-width="4" stroke-dasharray="1,5" stroke-linecap="round"/>
+                        <circle cx="100" cy="15" r="5" fill="none" stroke="#475569" stroke-width="3"/>
+                        <!-- Badan Seng Gantung -->
+                        <rect x="65" y="65" width="70" height="90" rx="8" fill="#475569" stroke="#334155" stroke-width="4"/>
+                        <!-- Lubang Pola Hati -->
+                        <path d="M100,115 C100,115 108,102 116,106 C124,110 124,122 116,130 L100,143 L84,130 C76,122 76,110 84,106 C92,102 100,115 100,115 Z" fill="#FAF8F5" stroke="#CBD5E1" stroke-width="1.5"/>
+                        <!-- Api Lilin -->
+                        <circle cx="100" cy="122" r="10" fill="#F59E0B" opacity="0.8" class="animate-pulse"/>
+                    </svg>
+                `
+            },
+            "vintage_heads_tails": {
+                id: "vintage_heads_tails",
+                name: "VINTAGE HEADS AND TAILS CARD GAME",
+                price: 45000,
+                strikePrice: 60000,
+                category: "Permainan Klasik",
+                description: "Game kartu vintage edukatif 'Heads & Tails' dengan ilustrasi lukisan hewan klasik bergaya Victoria Inggris. Sangat cocok dimainkan bersama anak-anak untuk mengasah memori dan kreativitas mereka.",
+                svg: `
+                    <svg viewBox="0 0 200 200" class="w-full h-full drop-shadow-xl transform group-hover:scale-105 transition duration-500">
+                        <ellipse cx="100" cy="175" rx="60" ry="10" fill="#000" opacity="0.08"/>
+                        <!-- Tumpukan Kartu Belakang -->
+                        <rect x="75" y="45" width="75" height="110" rx="6" fill="#F1F5F9" stroke="#E2E8F0" stroke-width="2" transform="rotate(-10 100 100)"/>
+                        <!-- Kartu Utama -->
+                        <rect x="65" y="45" width="70" height="110" rx="6" fill="#FEF2F2" stroke="#EF4444" stroke-width="3"/>
+                        <!-- Desain Grafis Kartu Retro -->
+                        <rect x="73" y="53" width="54" height="94" rx="4" fill="none" stroke="#FCA5A5" stroke-width="1" stroke-dasharray="2,2"/>
+                        <!-- Logo Singa Kecil Vintage -->
+                        <circle cx="100" cy="90" r="18" fill="#FEE2E2" stroke="#EF4444" stroke-width="1.5"/>
+                        <text x="100" y="95" font-family="serif" font-weight="bold" font-size="14" fill="#B91C1C" text-anchor="middle">LION</text>
+                        <text x="100" y="130" font-family="sans-serif" font-weight="bold" font-size="7" fill="#EF4444" text-anchor="middle" letter-spacing="1">HEADS & TAILS</text>
+                    </svg>
+                `
+            },
+            "vintage_snap_cards": {
+                id: "vintage_snap_cards",
+                name: "VINTAGE SNAP CARDS",
+                price: 45000,
+                strikePrice: 60000,
+                category: "Permainan Klasik",
+                description: "Koleksi lengkap kartu 'SNAP' klasik bernuansa nostalgic. Menampilkan karakter-karakter jenaka tempo dulu yang digambar dengan detail presisi tinggi. Hadiah klasik yang tak lekang oleh waktu.",
+                svg: `
+                    <svg viewBox="0 0 200 200" class="w-full h-full drop-shadow-xl transform group-hover:scale-105 transition duration-500">
+                        <ellipse cx="100" cy="175" rx="60" ry="10" fill="#000" opacity="0.08"/>
+                        <!-- Tumpukan Kartu Belakang -->
+                        <rect x="75" y="45" width="75" height="110" rx="6" fill="#F1F5F9" stroke="#E2E8F0" stroke-width="2" transform="rotate(8 100 100)"/>
+                        <!-- Kartu Utama -->
+                        <rect x="65" y="45" width="70" height="110" rx="6" fill="#FFFBEB" stroke="#D97706" stroke-width="3"/>
+                        <rect x="73" y="53" width="54" height="94" rx="4" fill="none" stroke="#FDE68A" stroke-width="1" stroke-dasharray="2,2"/>
+                        <!-- Gambar Badut/Jester Vintage -->
+                        <circle cx="100" cy="90" r="18" fill="#FEF3C7" stroke="#D97706" stroke-width="1.5"/>
+                        <text x="100" y="96" font-family="serif" font-weight="bold" font-size="16" fill="#B45309" text-anchor="middle">SNAP</text>
+                        <text x="100" y="130" font-family="sans-serif" font-weight="bold" font-size="7" fill="#D97706" text-anchor="middle" letter-spacing="1.5">TRADITIONAL</text>
+                    </svg>
+                `
+            },
+            "wooden_frame_white": {
+                id: "wooden_frame_white",
+                name: "WOODEN PICTURE FRAME WHITE FINISH",
+                price: 110000,
+                strikePrice: 150000,
+                category: "Bingkai Foto",
+                description: "Bingkai foto kayu premium dengan finishing cat putih minimalis semi-doff yang menonjolkan serat alami kayu pinus. Elemen dekorasi dinding serbaguna yang cocok untuk rumah bergaya modern-scandinavian.",
+                svg: `
+                    <svg viewBox="0 0 200 200" class="w-full h-full drop-shadow-xl transform group-hover:scale-105 transition duration-500">
+                        <ellipse cx="100" cy="175" rx="65" ry="10" fill="#000" opacity="0.08"/>
+                        <!-- Bingkai Kayu Putih Luar -->
+                        <rect x="50" y="40" width="100" height="120" rx="4" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="8"/>
+                        <!-- Frame Bagian Dalam -->
+                        <rect x="62" y="52" width="76" height="96" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="2"/>
+                        <!-- Foto Gunung Minimalis di Dalam -->
+                        <path d="M65,140 L95,95 L115,120 L125,110 L135,140 Z" fill="#94A3B8"/>
+                        <circle cx="120" cy="75" r="8" fill="#FDA4AF" opacity="0.8"/>
+                    </svg>
+                `
+            },
+            "wooden_frame_antique": {
+                id: "wooden_frame_antique",
+                name: "WOODEN FRAME ANTIQUE WHITE",
+                price: 125000,
+                strikePrice: 165000,
+                category: "Bingkai Foto",
+                description: "Bingkai foto bergaya Shabby Chic berwarna putih antik dengan aksen goresan serat kayu terkelupas (distressed wood texture) bernilai seni tinggi. Memberikan karakter sejarah retro pada foto kenangan Anda.",
+                svg: `
+                    <svg viewBox="0 0 200 200" class="w-full h-full drop-shadow-xl transform group-hover:scale-105 transition duration-500">
+                        <ellipse cx="100" cy="175" rx="65" ry="10" fill="#000" opacity="0.08"/>
+                        <!-- Bingkai Antik Berornamen Cream -->
+                        <rect x="50" y="40" width="100" height="120" rx="6" fill="#FEFBF6" stroke="#E6D5B8" stroke-width="10"/>
+                        <!-- Detail Ukiran Pojok -->
+                        <circle cx="55" cy="45" r="4" fill="#C5A880"/>
+                        <circle cx="145" cy="45" r="4" fill="#C5A880"/>
+                        <circle cx="55" cy="155" r="4" fill="#C5A880"/>
+                        <circle cx="145" cy="155" r="4" fill="#C5A880"/>
+                        <!-- Area Dalam -->
+                        <rect x="65" y="55" width="70" height="90" fill="#FAF5EF" stroke="#E6D5B8" stroke-width="2"/>
+                        <!-- Sketsa Ranting Bunga di Dalam -->
+                        <path d="M85,130 Q90,90 115,85" stroke="#8C7A5B" stroke-width="2" fill="none"/>
+                        <path d="M100,105 Q115,100 120,110" stroke="#8C7A5B" stroke-width="1.5" fill="none"/>
+                        <circle cx="115" cy="85" r="3" fill="#FDA4AF"/>
+                    </svg>
+                `
+            }
+        };
+
+        // --- DATABASE ATURAN REKOMENDASI MBA RIIL (SESUAI DENGAN JSON ANDA!) ---
+        const recommendationsDb = {
+            "STRAWBERRY CERAMIC TRINKET BOX": [
+                { consequent: "SWEETHEART CERAMIC TRINKET BOX", key: "sweetheart", confidence: 0.49, lift: 10.07 }
+            ],
+            "SWEETHEART CERAMIC TRINKET BOX": [
+                { consequent: "STRAWBERRY CERAMIC TRINKET BOX", key: "strawberry", confidence: 0.79, lift: 10.07 }
+            ],
+            "SINGLE HEART ZINC T-LIGHT HOLDER": [
+                { consequent: "HANGING HEART ZINC T-LIGHT HOLDER", key: "hanging_heart_holder", confidence: 0.63, lift: 13.69 }
+            ],
+            "HANGING HEART ZINC T-LIGHT HOLDER": [
+                { consequent: "SINGLE HEART ZINC T-LIGHT HOLDER", key: "single_heart_holder", confidence: 0.44, lift: 13.69 }
+            ],
+            "VINTAGE HEADS AND TAILS CARD GAME": [
+                { consequent: "VINTAGE SNAP CARDS", key: "vintage_snap_cards", confidence: 0.63, lift: 13.07 }
+            ],
+            "VINTAGE SNAP CARDS": [
+                { consequent: "VINTAGE HEADS AND TAILS CARD GAME", key: "vintage_heads_tails", confidence: 0.45, lift: 13.07 }
+            ],
+            "WOODEN PICTURE FRAME WHITE FINISH": [
+                { consequent: "WOODEN FRAME ANTIQUE WHITE", key: "wooden_frame_antique", confidence: 0.64, lift: 11.42 }
+            ],
+            "WOODEN FRAME ANTIQUE WHITE": [
+                { consequent: "WOODEN PICTURE FRAME WHITE FINISH", key: "wooden_frame_white", confidence: 0.53, lift: 11.42 }
+            ]
+        };
+
+        // --- GLOBAL STATE ---
+        let currentView = 'home';
+        let activeProductKey = 'strawberry';
+        let detailQuantity = 1;
+        let cart = [];
+
+        // --- INISIALISASI JALANKAN PROGRAM ---
+        window.addEventListener('DOMContentLoaded', () => {
+            renderKatalogBeranda();
+            navigateTo('home');
+        });
+
+        // --- NAVIGASI HALAMAN (SPA ROUTING) ---
+        function navigateTo(view, productKey = null) {
+            currentView = view;
+            
+            const homeView = document.getElementById('view-home');
+            const detailView = document.getElementById('view-detail');
+            const navHome = document.getElementById('nav-home');
+
+            if (view === 'home') {
+                homeView.classList.remove('hidden');
+                detailView.classList.add('hidden');
+                navHome.classList.add('text-rose-600', 'border-b-2', 'border-rose-500');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else if (view === 'detail' && productKey) {
+                activeProductKey = productKey;
+                detailQuantity = 1;
+                document.getElementById('product-qty').textContent = detailQuantity;
+                
+                homeView.classList.add('hidden');
+                detailView.classList.remove('hidden');
+                navHome.classList.remove('text-rose-600', 'border-b-2', 'border-rose-500');
+                
+                // Isi Konten Detail
+                populateProductDetail(productKey);
+                // Muat Rekomendasi MBA Berdasarkan Relasi JSON
+                loadRecommendationsForProduct(productsDb[productKey].name);
+                
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        // --- RENDERING KATALOG BERANDA ---
+        function renderKatalogBeranda() {
+            const grid = document.getElementById('product-grid');
+            grid.innerHTML = '';
+
+            Object.keys(productsDb).forEach(key => {
+                const prod = productsDb[key];
+                const card = document.createElement('div');
+                card.className = "bg-white border border-rose-50 rounded-2xl p-5 hover:shadow-xl hover:border-rose-100 transition duration-300 flex flex-col justify-between group";
+                
+                card.innerHTML = `
+                    <div class="cursor-pointer" onclick="navigateTo('detail', '${key}')">
+                        <!-- Gambar Preview -->
+                        <div class="aspect-square bg-[#FAF8F5] rounded-xl border border-rose-50 flex items-center justify-center p-6 relative overflow-hidden mb-4 shadow-inner">
+                            <span class="absolute top-2 left-2 bg-rose-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase">Buka Detail</span>
+                            <div class="w-40 h-40">
+                                ${prod.svg}
+                            </div>
+                        </div>
+                        <p class="text-[10px] text-rose-600 tracking-widest font-bold uppercase mb-1">${prod.category}</p>
+                        <h3 class="font-serif font-bold text-gray-950 group-hover:text-rose-700 transition duration-300 text-base line-clamp-2">${prod.name}</h3>
+                        <div class="flex items-center gap-1 mt-1 text-xs text-amber-400">
+                            <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                            <span class="text-gray-400 font-medium ml-1">(4.9)</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 pt-3 border-t border-rose-50 flex items-center justify-between gap-2">
+                        <div>
+                            <p class="text-rose-700 font-extrabold text-base">Rp ${prod.price.toLocaleString('id-ID')}</p>
+                            <p class="text-[10px] text-gray-400 line-through">Rp ${prod.strikePrice.toLocaleString('id-ID')}</p>
+                        </div>
+                        <button onclick="navigateTo('detail', '${key}')" class="bg-rose-50 hover:bg-rose-600 text-rose-800 hover:text-white font-bold px-4 py-2 rounded-xl transition duration-300 text-xs">
+                            Detail →
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // --- POPULASI DATA DETAIL ---
+        function populateProductDetail(key) {
+            const prod = productsDb[key];
+            document.title = `${prod.name} - Ceramique.co`;
+            
+            document.getElementById('detail-product-category').textContent = prod.category;
+            document.getElementById('detail-product-title').textContent = prod.name;
+            document.getElementById('detail-product-price').textContent = `Rp ${prod.price.toLocaleString('id-ID')}`;
+            document.getElementById('detail-product-strike-price').textContent = `Rp ${prod.strikePrice.toLocaleString('id-ID')}`;
+            document.getElementById('detail-product-description').textContent = prod.description;
+            document.getElementById('detail-product-image').innerHTML = prod.svg;
+
+            const btnCart = document.getElementById('btn-add-to-cart');
+            btnCart.onclick = () => addToCart(prod.name, prod.price);
+        }
+
+        // --- KUANTITAS BARANG ---
+        function updateQty(amount) {
+            detailQuantity = Math.max(1, detailQuantity + amount);
+            document.getElementById('product-qty').textContent = detailQuantity;
+        }
+
+        // --- AMBIL DATA REKOMENDASI (BEHIND THE SCENE INTEGRATION) ---
+        async function loadRecommendationsForProduct(productName) {
+            const loadingElement = document.getElementById('rec-loading');
+            const listElement = document.getElementById('rec-list');
+            const debugStatus = document.getElementById('debug-status');
+            const debugJson = document.getElementById('debug-json');
+            const debugUrl = document.getElementById('debug-url');
+            const debugConfidence = document.getElementById('debug-confidence');
+            const debugLift = document.getElementById('debug-lift');
+            const apiDot = document.getElementById('api-status-dot');
+
+            loadingElement.classList.remove('hidden');
+            listElement.classList.add('hidden');
+
+            const apiUrl = `http://127.0.0.1:5000/api/recommendations?product=${encodeURIComponent(productName)}`;
+            debugUrl.textContent = apiUrl;
+
+            try {
+                debugStatus.textContent = "Mengambil data...";
+                debugStatus.className = "text-yellow-400";
+
+                // Panggil server Flask lokal Anda
+                const response = await fetch(apiUrl);
+                if (!response.ok) throw new Error("Gagal terhubung dengan server API.");
+
+                const data = await response.json();
+                
+                debugStatus.textContent = "Terhubung (200 OK)";
+                debugStatus.className = "text-emerald-400";
+                apiDot.className = "w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse";
+                debugJson.textContent = JSON.stringify(data, null, 2);
+
+                // Ekstrak parameter asosiasi riil dari respons API Flask jika ada
+                if (data && data.length > 0) {
+                    debugConfidence.textContent = data[0].confidence ? data[0].confidence.toFixed(4) : "-";
+                    debugLift.textContent = data[0].lift ? data[0].lift.toFixed(2) : "-";
+                } else {
+                    debugConfidence.textContent = "N/A";
+                    debugLift.textContent = "N/A";
+                }
+
+                renderRecommendations(data);
+
+            } catch (error) {
+                console.warn(`Gagal memanggil API untuk ${productName}. Beralih otomatis ke kecocokan JSON riil (Offline Demo Mode).`);
+                
+                // Set debugger status offline tapi gunakan dataset riil buatan Anda
+                debugStatus.textContent = "Offline (Menggunakan Demo Mode)";
+                debugStatus.className = "text-amber-400";
+                apiDot.className = "w-2.5 h-2.5 rounded-full bg-amber-400";
+
+                const mockRecList = recommendationsDb[productName] || [];
+                
+                // Isi metrik dari JSON riil di dalam debugger panel
+                if (mockRecList.length > 0) {
+                    debugConfidence.textContent = mockRecList[0].confidence;
+                    debugLift.textContent = mockRecList[0].lift;
+                } else {
+                    debugConfidence.textContent = "N/A";
+                    debugLift.textContent = "N/A";
+                }
+
+                debugJson.textContent = JSON.stringify({
+                    "info": "Menampilkan Aturan Asosiasi Berdasarkan File JSON yang di-upload",
+                    "barang_utama": productName,
+                    "recommended_results": mockRecList
+                }, null, 2);
+
+                setTimeout(() => {
+                    renderRecommendations(mockRecList);
+                }, 600);
+            }
+        }
+
+        // --- RENDER REKOMENDASI MBA DI SEKSI BAWAH ---
+        function renderRecommendations(recommendations) {
+            const loadingElement = document.getElementById('rec-loading');
+            const listElement = document.getElementById('rec-list');
+            
+            listElement.innerHTML = '';
+
+            if (!recommendations || recommendations.length === 0) {
+                listElement.innerHTML = `
+                    <div class="col-span-full py-8 text-center text-gray-400 text-sm">
+                        Produk ini belum memiliki asosiasi relasi yang cukup kuat berdasarkan batasan korelasi model.
+                    </div>
+                `;
+            } else {
+                recommendations.forEach(item => {
+                    // Penyesuaian kunci API 'consequent' / 'rekomendasi'
+                    const targetName = item.consequent || item.rekomendasi || item;
+                    const confidence = item.confidence ? (item.confidence * 100).toFixed(0) : 50;
+                    
+                    // Temukan kunci objek di database lokal kita untuk render SVG
+                    let matchedKey = item.key;
+                    if (!matchedKey) {
+                        matchedKey = Object.keys(productsDb).find(k => productsDb[k].name === targetName);
+                    }
+                    
+                    const prodInfo = productsDb[matchedKey];
+                    if (!prodInfo) return; // Lindungi jika ada nama yang tidak cocok di lokal database
+
+                    const card = document.createElement('div');
+                    card.className = "bg-[#FAF8F5] border border-rose-100 rounded-2xl p-5 hover:shadow-lg transition duration-300 flex flex-col justify-between group";
+                    
+                    card.innerHTML = `
+                        <!-- Klik produk rekomendasi langsung melakukan navigasi mulus -->
+                        <div class="cursor-pointer" onclick="navigateTo('detail', '${matchedKey}')">
+                            <div class="aspect-square bg-white rounded-xl border border-rose-50 flex items-center justify-center p-6 relative overflow-hidden mb-4 shadow-sm">
+                                <span class="absolute top-2 left-2 bg-emerald-600 text-white text-[9px] font-bold px-2.5 py-1 rounded-full uppercase">Sering Dibeli Bersama</span>
+                                <span class="absolute top-2 right-2 bg-rose-100 text-rose-800 text-[9px] font-bold px-2 py-1 rounded-full uppercase">Korelasi ${confidence}%</span>
+                                <div class="w-36 h-36">
+                                    ${prodInfo.svg}
+                                </div>
+                            </div>
+                            <h3 class="font-serif font-bold text-gray-900 group-hover:text-rose-700 transition duration-300 text-sm line-clamp-2">${targetName}</h3>
+                            <div class="flex items-center gap-1 mt-1 text-xs text-amber-400">
+                                <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                                <span class="text-gray-400 font-medium ml-1">(4.8)</span>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 pt-3 border-t border-rose-100/50 flex items-center justify-between gap-2">
+                            <div>
+                                <p class="text-[9px] text-gray-400 uppercase tracking-wider font-semibold">Harga Spesial</p>
+                                <p class="text-rose-700 font-extrabold text-sm">Rp ${prodInfo.price.toLocaleString('id-ID')}</p>
+                            </div>
+                            <button onclick="addToCart('${targetName}', ${prodInfo.price})" class="bg-rose-100 hover:bg-rose-600 hover:text-white text-rose-800 font-bold px-3.5 py-2 rounded-xl transition duration-300 text-xs flex items-center gap-1">
+                                ➕ Beli
+                            </button>
+                        </div>
+                    `;
+                    listElement.appendChild(card);
+                });
+            }
+
+            loadingElement.classList.add('hidden');
+            listElement.classList.remove('hidden');
+        }
+
+        // --- SISTEM KERANJANG BELANJA ---
+        function addToCart(name, price) {
+            const isCurrentProduct = (name === productsDb[activeProductKey].name);
+            const qtyToAdd = (isCurrentProduct && currentView === 'detail') ? detailQuantity : 1;
+
+            const existing = cart.find(item => item.name === name);
+            if (existing) {
+                existing.qty += qtyToAdd;
+            } else {
+                const prodKey = Object.keys(productsDb).find(k => productsDb[k].name === name);
+                cart.push({ key: prodKey, name, price, qty: qtyToAdd });
+            }
+
+            updateCartUI();
+            showToast("Berhasil Ditambahkan!", `${qtyToAdd}x ${name} masuk ke keranjang belanja.`, '🌸');
+        }
+
+        function updateCartUI() {
+            const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+            const badge = document.getElementById('cart-count');
+            badge.textContent = totalItems;
+            
+            badge.classList.remove('scale-90');
+            badge.classList.add('scale-110');
+            setTimeout(() => {
+                badge.classList.remove('scale-110');
+                badge.classList.add('scale-90');
+            }, 300);
+
+            const cartContainer = document.getElementById('cart-items');
+            const cartTotal = document.getElementById('cart-total');
+            cartContainer.innerHTML = '';
+
+            if (cart.length === 0) {
+                cartContainer.innerHTML = `
+                    <div class="py-8 text-center text-gray-400 text-sm">
+                        Keranjang Belanja Anda kosong.
+                    </div>
+                `;
+                cartTotal.textContent = "Rp 0";
+                return;
+            }
+
+            let grandTotal = 0;
+            cart.forEach(item => {
+                const subtotal = item.price * item.qty;
+                grandTotal += subtotal;
+                const prod = productsDb[item.key];
+
+                const row = document.createElement('div');
+                row.className = "flex items-center justify-between gap-4 bg-[#FAF8F5] p-3 rounded-xl border border-rose-50";
+                row.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-white rounded-lg p-1 border border-rose-100 flex items-center justify-center">
+                            ${prod ? prod.svg : '🏺'}
+                        </div>
+                        <div>
+                            <p class="font-bold text-xs text-gray-900 line-clamp-1">${item.name}</p>
+                            <p class="text-[10px] text-gray-500">${item.qty} x Rp ${item.price.toLocaleString('id-ID')}</p>
+                        </div>
+                    </div>
+                    <div class="text-right flex items-center gap-3">
+                        <span class="text-xs font-bold text-rose-700">Rp ${subtotal.toLocaleString('id-ID')}</span>
+                        <button onclick="removeFromCart('${item.name}')" class="text-gray-400 hover:text-rose-600 text-sm font-bold">&times;</button>
+                    </div>
+                `;
+                cartContainer.appendChild(row);
+            });
+
+            cartTotal.textContent = `Rp ${grandTotal.toLocaleString('id-ID')}`;
+        }
+
+        function removeFromCart(name) {
+            cart = cart.filter(item => item.name !== name);
+            updateCartUI();
+        }
+
+        function toggleCartModal() {
+            const modal = document.getElementById('cart-modal');
+            modal.classList.toggle('hidden');
+            updateCartUI();
+        }
+
+        function checkout() {
+            if (cart.length === 0) return;
+            showToast("Pesanan Dibuat!", "Terima kasih telah berbelanja di Ceramique.co!", "🎉");
+            cart = [];
+            updateCartUI();
+            toggleCartModal();
+        }
+
+        // --- TOAST NOTIFICATION ---
+        function showToast(title, desc, emoji = '🛒') {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-title').textContent = title;
+            document.getElementById('toast-desc').textContent = desc;
+            
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                toast.classList.remove('translate-x-[400px]');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.add('translate-x-[400px]');
+                setTimeout(() => toast.classList.add('hidden'), 300);
+            }, 3500);
+        }
+
+        function toggleDebugPanel() {
+            const panel = document.getElementById('debug-panel');
+            panel.classList.toggle('hidden');
+        }
+    </script>
+</body>
+</html>
