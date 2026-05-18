@@ -1,14 +1,14 @@
 [
     {
-        "barang_utama": "SINGLE HEART ZINC T-LIGHT HOLDER",
-        "rekomendasi": "HANGING HEART ZINC T-LIGHT HOLDER",
-        "confidence": 0.63,
-        "lift": 13.69
-    },
-    {
         "barang_utama": "HANGING HEART ZINC T-LIGHT HOLDER",
         "rekomendasi": "SINGLE HEART ZINC T-LIGHT HOLDER",
         "confidence": 0.44,
+        "lift": 13.69
+    },
+    {
+        "barang_utama": "SINGLE HEART ZINC T-LIGHT HOLDER",
+        "rekomendasi": "HANGING HEART ZINC T-LIGHT HOLDER",
+        "confidence": 0.63,
         "lift": 13.69
     },
     {
@@ -24,15 +24,15 @@
         "lift": 13.07
     },
     {
-        "barang_utama": "WOODEN PICTURE FRAME WHITE FINISH",
-        "rekomendasi": "WOODEN FRAME ANTIQUE WHITE",
-        "confidence": 0.64,
-        "lift": 11.42
-    },
-    {
         "barang_utama": "WOODEN FRAME ANTIQUE WHITE",
         "rekomendasi": "WOODEN PICTURE FRAME WHITE FINISH",
         "confidence": 0.53,
+        "lift": 11.42
+    },
+    {
+        "barang_utama": "WOODEN PICTURE FRAME WHITE FINISH",
+        "rekomendasi": "WOODEN FRAME ANTIQUE WHITE",
+        "confidence": 0.64,
         "lift": 11.42
     },
     {
