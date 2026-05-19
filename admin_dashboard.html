@@ -1,370 +1,392 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Dashboard - Market Basket Analysis</title>
-
-  <script src="https://cdn.tailwindcss.com"></script>
-
-  <style>
-    body {
-      background: #f5f7fb;
-      font-family: Arial, sans-serif;
-    }
-
-    .glass {
-      background: rgba(255,255,255,0.9);
-      backdrop-filter: blur(10px);
-    }
-
-    .table-scroll::-webkit-scrollbar {
-      height: 8px;
-      width: 8px;
-    }
-
-    .table-scroll::-webkit-scrollbar-thumb {
-      background: #cbd5e1;
-      border-radius: 999px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin - Ceramique.co MBA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['Playfair Display', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Animasi Transisi Halus */
+        .fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* Scrollbar kustom tema Ceramique */
+        .table-scroll::-webkit-scrollbar { height: 8px; width: 8px; }
+        .table-scroll::-webkit-scrollbar-thumb { background: #fda4af; border-radius: 999px; }
+        .table-scroll::-webkit-scrollbar-track { background: #fff1f2; }
+    </style>
 </head>
-<body>
+<body class="bg-[#FAF8F5] font-sans text-gray-800 antialiased min-h-screen flex flex-col justify-between">
 
-  <div class="min-h-screen p-6">
-
-    <!-- Header -->
-    <div class="mb-8">
-      <h1 class="text-4xl font-bold text-slate-800">
-        Admin Dashboard
-      </h1>
-      <p class="text-slate-500 mt-2">
-        Decision Support System (SPK) Market Basket Analysis
-      </p>
-    </div>
-
-    <!-- Info Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
-
-      <div class="glass rounded-2xl shadow-md p-6 border border-slate-100">
-        <h2 class="text-slate-500 text-sm font-semibold mb-2">
-          Total Rules
-        </h2>
-        <p id="totalRules" class="text-3xl font-bold text-blue-600">
-          0
-        </p>
-      </div>
-
-      <div class="glass rounded-2xl shadow-md p-6 border border-slate-100">
-        <h2 class="text-slate-500 text-sm font-semibold mb-2">
-          Confidence Tertinggi
-        </h2>
-        <p id="highestConfidence" class="text-3xl font-bold text-green-600">
-          0%
-        </p>
-      </div>
-
-      <div class="glass rounded-2xl shadow-md p-6 border border-slate-100">
-        <h2 class="text-slate-500 text-sm font-semibold mb-2">
-          Lift Tertinggi
-        </h2>
-        <p id="highestLift" class="text-3xl font-bold text-purple-600">
-          0
-        </p>
-      </div>
-
-    </div>
-
-    <!-- Search Box -->
-    <div class="glass rounded-2xl shadow-md p-6 mb-8 border border-slate-100">
-
-      <div class="flex flex-col md:flex-row gap-4">
-
-        <input
-          type="text"
-          id="searchInput"
-          placeholder="Cari produk... contoh: LOVE BUILDING BLOCK WORD"
-          class="flex-1 border border-slate-300 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-400"
-        />
-
-        <button
-          onclick="searchRecommendations()"
-          class="bg-blue-600 hover:bg-blue-700 transition text-white px-6 py-3 rounded-xl font-semibold"
-        >
-          Cari Rekomendasi
-        </button>
-
-        <button
-          onclick="loadAllData()"
-          class="bg-slate-700 hover:bg-slate-800 transition text-white px-6 py-3 rounded-xl font-semibold"
-        >
-          Reset
-        </button>
-
-      </div>
-
-      <div class="mt-5 text-sm text-slate-500 leading-7">
-        <p>
-          <span class="font-semibold text-slate-700">User Journey:</span>
-          Admin mengetik barang yang kurang laku → sistem menampilkan rekomendasi barang yang sering dibeli bersamaan → admin dapat membuat strategi bundling atau diskon.
-        </p>
-      </div>
-
-    </div>
-
-    <!-- Recommendation Result -->
-    <div id="recommendationCard" class="hidden glass rounded-2xl shadow-md p-6 mb-8 border border-slate-100">
-
-      <h2 class="text-2xl font-bold text-slate-800 mb-4">
-        Hasil Analisis Rekomendasi
-      </h2>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-
-        <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200">
-          <h3 class="text-sm text-slate-500 mb-2">
-            Barang Dicari
-          </h3>
-          <p id="barangUtama" class="text-xl font-bold text-slate-800"></p>
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-rose-100/60">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-2 cursor-pointer group" onclick="window.location.reload()">
+                <span class="text-2xl group-hover:scale-110 transition-transform">🍓</span>
+                <span class="font-serif text-xl font-bold tracking-wide text-rose-800">Ceramique.co</span>
+                <span class="bg-rose-100 text-rose-800 text-[10px] font-bold px-2 py-0.5 rounded-md ml-2 uppercase tracking-wider">Admin</span>
+            </div>
+            
+            <nav class="hidden md:flex gap-8 text-sm font-medium">
+                <button onclick="window.location.reload()" class="text-rose-600 border-b-2 border-rose-500 pb-1 transition">Beranda MBA</button>
+                <a href="#katalog" class="text-gray-600 hover:text-rose-600 transition">Aturan Data</a>
+            </nav>
+            
+            <div class="flex items-center gap-4">
+                <div class="relative cursor-pointer flex items-center gap-2 bg-rose-50 px-3 py-1.5 rounded-full border border-rose-100">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" id="api-status-dot"></span>
+                    <span id="api-status-text" class="text-xs font-bold text-rose-800">API Terhubung</span>
+                </div>
+            </div>
         </div>
+    </header>
 
-        <div class="bg-blue-50 rounded-2xl p-5 border border-blue-200">
-          <h3 class="text-sm text-blue-500 mb-2">
-            Rekomendasi Produk
-          </h3>
-          <p id="barangRekomendasi" class="text-xl font-bold text-blue-700"></p>
+    <main class="w-full flex-grow fade-in">
+        
+        <section class="max-w-6xl mx-auto px-4 pt-6 pb-8">
+            <div class="bg-gradient-to-r from-rose-50 to-amber-50/50 rounded-3xl p-8 md:p-12 border border-rose-100/50 flex flex-col md:flex-row items-center justify-between gap-8 shadow-sm relative overflow-hidden">
+                <div class="absolute -right-10 -bottom-10 opacity-20 text-9xl">🛒</div>
+                
+                <div class="space-y-4 max-w-lg z-10">
+                    <span class="text-xs font-bold uppercase tracking-widest text-rose-600 bg-white/60 px-3 py-1.5 rounded-full shadow-sm">SPK Backend Python</span>
+                    <h1 class="font-serif text-3xl md:text-5xl font-bold text-gray-900 leading-tight">Market Basket Analysis Dashboard</h1>
+                    <p class="text-gray-600 text-sm md:text-base">Kelola strategi promosi dan tata letak toko berdasarkan keterkaitan produk dari riwayat transaksi nyata.</p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full md:w-auto z-10">
+                    <div class="bg-white/90 backdrop-blur-sm rounded-2xl p-5 border border-rose-100 text-center shadow-sm hover:-translate-y-1 transition duration-300">
+                        <span class="block text-2xl mb-1">🏺</span>
+                        <h2 class="text-rose-600 text-[10px] font-bold uppercase tracking-widest mb-1">Total Rules</h2>
+                        <p id="totalRules" class="font-serif text-3xl font-bold text-gray-900">0</p>
+                    </div>
+                    <div class="bg-white/90 backdrop-blur-sm rounded-2xl p-5 border border-rose-100 text-center shadow-sm hover:-translate-y-1 transition duration-300">
+                        <span class="block text-2xl mb-1">✨</span>
+                        <h2 class="text-emerald-600 text-[10px] font-bold uppercase tracking-widest mb-1">Max Confidence</h2>
+                        <p id="highestConfidence" class="font-serif text-3xl font-bold text-gray-900">0%</p>
+                    </div>
+                    <div class="bg-white/90 backdrop-blur-sm rounded-2xl p-5 border border-rose-100 text-center shadow-sm hover:-translate-y-1 transition duration-300">
+                        <span class="block text-2xl mb-1">🚀</span>
+                        <h2 class="text-amber-600 text-[10px] font-bold uppercase tracking-widest mb-1">Max Lift</h2>
+                        <p id="highestLift" class="font-serif text-3xl font-bold text-gray-900">0</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="max-w-6xl mx-auto px-4 pb-8">
+            <div class="bg-white p-6 md:p-10 rounded-3xl shadow-sm border border-rose-50/50">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-2 mb-6">
+                    <div>
+                        <h2 class="font-serif text-2xl md:text-3xl font-bold text-gray-900">Uji Algoritma Asosiasi</h2>
+                        <p class="text-gray-500 text-sm mt-1">Cari produk yang penjualannya menurun untuk menemukan pasangan <em>bundling</em>-nya.</p>
+                    </div>
+                    <div class="text-xs text-rose-600 bg-rose-50 px-3 py-1.5 rounded-lg border border-rose-100 font-medium">
+                        ✨ Terhubung ke Port 5000
+                    </div>
+                </div>
+
+                <div class="flex flex-col md:flex-row gap-4">
+                    <input 
+                        type="text" 
+                        id="searchInput" 
+                        placeholder="Ketik nama produk, misal: STRAWBERRY CERAMIC TRINKET BOX" 
+                        class="flex-1 bg-[#FAF8F5] border border-gray-200 rounded-xl px-5 py-4 outline-none focus:border-rose-400 focus:ring-2 focus:ring-rose-100 transition text-sm text-gray-800 font-medium placeholder-gray-400"
+                    />
+                    <button 
+                        onclick="searchRecommendations()" 
+                        class="bg-rose-600 hover:bg-rose-700 active:bg-rose-800 text-white font-bold py-4 px-8 rounded-xl transition duration-300 shadow-md shadow-rose-600/20 flex items-center justify-center gap-2 text-sm"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                        Analisis Produk
+                    </button>
+                    <button 
+                        onclick="loadAllData()" 
+                        class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-4 px-6 rounded-xl transition duration-300 text-sm whitespace-nowrap"
+                    >
+                        Reset Tabel
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="recommendationCard" class="max-w-6xl mx-auto px-4 pb-8 hidden fade-in">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start bg-white p-6 md:p-10 rounded-3xl shadow-sm border border-rose-50/50">
+                
+                <div class="space-y-6 w-full">
+                    <h2 class="font-serif text-2xl font-bold text-gray-900 mb-2 border-b border-rose-50 pb-4">
+                        Hasil Analisis Keterkaitan
+                    </h2>
+                    
+                    <div class="bg-[#FAF8F5] border border-rose-50 p-5 rounded-2xl relative group">
+                        <span class="absolute top-4 right-4 bg-rose-600 text-white text-[9px] font-bold px-2.5 py-1 rounded-full uppercase">Antecedent</span>
+                        <p class="text-[10px] font-semibold tracking-widest text-gray-500 uppercase mb-1">Barang Utama</p>
+                        <h3 id="barangUtama" class="font-serif text-xl md:text-2xl font-bold text-gray-900"></h3>
+                    </div>
+
+                    <div class="flex justify-center -my-2 z-10 relative">
+                        <div class="bg-white border border-rose-100 rounded-full p-2 shadow-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-rose-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg>
+                        </div>
+                    </div>
+
+                    <div class="bg-rose-50/50 border border-rose-100 p-5 rounded-2xl relative group">
+                        <span class="absolute top-4 right-4 bg-emerald-600 text-white text-[9px] font-bold px-2.5 py-1 rounded-full uppercase">Consequent</span>
+                        <p class="text-[10px] font-semibold tracking-widest text-rose-600 uppercase mb-1">Direkomendasikan Dengan</p>
+                        <h3 id="barangRekomendasi" class="font-serif text-xl md:text-2xl font-bold text-rose-900"></h3>
+                    </div>
+                </div>
+
+                <div class="space-y-6 w-full mt-2">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="border border-rose-50 p-5 rounded-2xl bg-white shadow-sm text-center flex flex-col items-center justify-center">
+                            <span class="block text-2xl mb-2 text-emerald-500">🎯</span>
+                            <span id="confidenceValue" class="text-3xl font-bold text-gray-900 mb-1"></span>
+                            <span class="text-[10px] font-bold uppercase text-emerald-600">Confidence</span>
+                        </div>
+                        <div class="border border-rose-50 p-5 rounded-2xl bg-white shadow-sm text-center flex flex-col items-center justify-center">
+                            <span class="block text-2xl mb-2 text-amber-500">🚀</span>
+                            <span id="liftValue" class="text-3xl font-bold text-gray-900 mb-1"></span>
+                            <span class="text-[10px] font-bold uppercase text-amber-600">Lift Ratio</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900 p-6 rounded-2xl shadow-xl border border-slate-800 text-slate-200 mt-4 relative overflow-hidden">
+                        <div class="absolute -right-4 -top-4 opacity-10 text-6xl">💡</div>
+                        <h4 class="font-bold border-b border-slate-700 pb-2 text-rose-400 mb-3 flex items-center gap-2 text-sm">
+                            <span class="text-lg">🤖</span> Rekomendasi Tindakan Admin
+                        </h4>
+                        <p id="decisionText" class="text-xs leading-relaxed text-slate-300"></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="katalog" class="max-w-6xl mx-auto px-4 pb-12 scroll-mt-24">
+            <div class="bg-white p-6 md:p-10 rounded-3xl shadow-sm border border-rose-50/50">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-6">
+                    <div>
+                        <h2 class="font-serif text-2xl md:text-3xl font-bold text-gray-900">Database Aturan Asosiasi Riil</h2>
+                        <p class="text-gray-500 text-sm mt-1">Dihasilkan oleh model *Market Basket Analysis*.</p>
+                    </div>
+                    <div class="bg-rose-50 text-rose-800 text-xs font-bold px-4 py-2 rounded-xl border border-rose-100 flex items-center gap-2 shadow-inner">
+                        <span class="text-lg">📊</span>
+                        <span id="tableInfo">Memuat data API...</span>
+                    </div>
+                </div>
+                
+                <div class="overflow-x-auto table-scroll rounded-2xl border border-rose-100">
+                    <table class="min-w-full border-collapse">
+                        <thead>
+                            <tr class="bg-[#FAF8F5] text-left border-b border-rose-100">
+                                <th class="px-6 py-5 font-serif font-bold text-rose-900 text-sm whitespace-nowrap">No</th>
+                                <th class="px-6 py-5 font-serif font-bold text-rose-900 text-sm whitespace-nowrap">Barang Utama (Antecedent)</th>
+                                <th class="px-6 py-5 font-serif font-bold text-rose-900 text-sm whitespace-nowrap">Rekomendasi (Consequent)</th>
+                                <th class="px-6 py-5 font-serif font-bold text-rose-900 text-sm whitespace-nowrap text-center">Confidence</th>
+                                <th class="px-6 py-5 font-serif font-bold text-rose-900 text-sm whitespace-nowrap text-center">Lift Ratio</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody" class="bg-white text-sm divide-y divide-rose-50">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-900 text-gray-400 text-sm py-12 border-t border-gray-800 mt-auto">
+        <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-center md:text-left">
+                <p class="font-serif text-white font-bold text-lg mb-1">🍓 Ceramique.co Admin</p>
+                <p class="text-xs text-gray-500">Sistem Pendukung Keputusan Berbasis API Python (app.py).</p>
+            </div>
+            <p class="text-xs">&copy; 2026 Ceramique.co. Hak Cipta Dilindungi Undang-Undang.</p>
+            <div class="flex gap-6 text-xs">
+                <a href="#" class="hover:underline text-rose-400">Dashboard</a>
+                <a href="#" class="hover:underline">Bantuan</a>
+            </div>
         </div>
+    </footer>
 
-      </div>
+    <script>
+        // Sesuaikan URL API dengan route di app.py
+        const API_URL = 'http://127.0.0.1:5000/api/recommendations';
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-5">
+        async function loadAllData() {
+            try {
+                // Reset input
+                document.getElementById('searchInput').value = '';
+                
+                // Fetch data dari API Flask
+                const response = await fetch(API_URL);
+                if (!response.ok) throw new Error("Gagal mengambil data dari API.");
+                const result = await response.json();
 
-        <div class="bg-green-50 rounded-2xl p-5 border border-green-200">
-          <h3 class="text-sm text-green-600 mb-2">
-            Confidence
-          </h3>
-          <p id="confidenceValue" class="text-3xl font-bold text-green-700"></p>
-          <p class="text-sm text-green-600 mt-2">
-            Semakin tinggi confidence, semakin besar kemungkinan produk dibeli bersamaan.
-          </p>
-        </div>
+                // Render tabel & dashboard dengan format JSON API
+                displayTable(result.data);
+                updateDashboard(result.data);
 
-        <div class="bg-purple-50 rounded-2xl p-5 border border-purple-200">
-          <h3 class="text-sm text-purple-600 mb-2">
-            Lift
-          </h3>
-          <p id="liftValue" class="text-3xl font-bold text-purple-700"></p>
-          <p class="text-sm text-purple-600 mt-2">
-            Lift > 1 menunjukkan hubungan antar produk cukup kuat.
-          </p>
-        </div>
+                // Update teks info sesuai respons `total_rules` atau fallback panjang array
+                const total = result.total_rules || result.data.length;
+                document.getElementById('tableInfo').innerText = `${total} aturan ditemukan`;
+                document.getElementById('totalRules').innerText = total;
 
-      </div>
+                // Sembunyikan kartu rekomendasi
+                document.getElementById('recommendationCard').classList.add('hidden');
+                
+                // Status indikator online
+                setApiStatus(true);
 
-      <div class="mt-5 bg-yellow-50 border border-yellow-200 rounded-2xl p-5">
-        <h3 class="font-bold text-yellow-700 mb-2">
-          Rekomendasi Keputusan
-        </h3>
-
-        <p id="decisionText" class="text-yellow-800 leading-7"></p>
-      </div>
-
-    </div>
-
-    <!-- Table -->
-    <div class="glass rounded-2xl shadow-md p-6 border border-slate-100">
-
-      <div class="flex items-center justify-between mb-5">
-        <h2 class="text-2xl font-bold text-slate-800">
-          Data Association Rules
-        </h2>
-
-        <span id="tableInfo" class="text-sm text-slate-500">
-          Memuat data...
-        </span>
-      </div>
-
-      <div class="overflow-x-auto table-scroll">
-
-        <table class="min-w-full border-collapse overflow-hidden rounded-xl">
-
-          <thead>
-            <tr class="bg-slate-800 text-white text-left">
-              <th class="px-5 py-4">No</th>
-              <th class="px-5 py-4">Barang Utama</th>
-              <th class="px-5 py-4">Rekomendasi</th>
-              <th class="px-5 py-4">Confidence</th>
-              <th class="px-5 py-4">Lift</th>
-            </tr>
-          </thead>
-
-          <tbody id="tableBody" class="bg-white">
-          </tbody>
-
-        </table>
-
-      </div>
-
-    </div>
-
-  </div>
-
-  <script>
-
-    const API_URL = 'http://127.0.0.1:5000/api/recommendations';
-
-    async function loadAllData() {
-      try {
-
-        const response = await fetch(API_URL);
-        const result = await response.json();
-
-        displayTable(result.data);
-
-        // Menggunakan field total_rekomendasi dari backend Flask
-        if (result.total_rekomendasi !== undefined) {
-          document.getElementById('tableInfo').innerText =
-            `${result.total_rekomendasi} rekomendasi ditemukan`;
-        }
-        updateDashboard(result.data);
-
-        // Menggunakan field total_rules dari backend Flask
-        if (result.total_rules !== undefined) {
-          document.getElementById('totalRules').innerText = result.total_rules;
+            } catch (error) {
+                console.error(error);
+                setApiStatus(false);
+                document.getElementById('tableBody').innerHTML = `
+                    <tr>
+                        <td colspan="5" class="text-center py-12 text-rose-500 text-sm font-medium bg-rose-50/50">
+                            🚨 Koneksi API Gagal. Pastikan file <b>app.py</b> sedang berjalan di <b>http://127.0.0.1:5000</b>.
+                        </td>
+                    </tr>
+                `;
+            }
         }
 
-        document.getElementById('recommendationCard').classList.add('hidden');
+        function updateDashboard(data) {
+            let highestConfidence = 0;
+            let highestLift = 0;
 
-      } catch (error) {
-        alert('Gagal mengambil data dari backend!');
-        console.error(error);
-      }
-    }
+            if (data && data.length > 0) {
+                data.forEach(item => {
+                    if (item.confidence > highestConfidence) highestConfidence = item.confidence;
+                    if (item.lift > highestLift) highestLift = item.lift;
+                });
+            }
 
-    function updateDashboard(data) {
-
-      document.getElementById('totalRules').innerText = data.length;
-
-      let highestConfidence = 0;
-      let highestLift = 0;
-
-      data.forEach(item => {
-        if (item.confidence > highestConfidence) {
-          highestConfidence = item.confidence;
+            document.getElementById('highestConfidence').innerText = (highestConfidence * 100).toFixed(0) + '%';
+            document.getElementById('highestLift').innerText = highestLift.toFixed(2);
         }
 
-        if (item.lift > highestLift) {
-          highestLift = item.lift;
-        }
-      });
+        function displayTable(data) {
+            const tableBody = document.getElementById('tableBody');
+            tableBody.innerHTML = '';
 
-      document.getElementById('highestConfidence').innerText =
-        (highestConfidence * 100).toFixed(0) + '%';
+            if (!data || data.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="text-center py-12 text-gray-400 text-sm">
+                            Data asosiasi kosong atau produk tidak ditemukan.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
 
-      document.getElementById('highestLift').innerText = highestLift;
-    }
-
-    function displayTable(data) {
-
-      const tableBody = document.getElementById('tableBody');
-      const tableInfo = document.getElementById('tableInfo');
-
-      tableBody.innerHTML = '';
-
-      if (data.length === 0) {
-
-        tableBody.innerHTML = `
-          <tr>
-            <td colspan="5" class="text-center py-10 text-slate-500">
-              Data tidak ditemukan.
-            </td>
-          </tr>
-        `;
-
-        return;
-      }
-
-      tableInfo.innerText = `${data.length} rules ditemukan`;
-
-      data.forEach((item, index) => {
-
-        tableBody.innerHTML += `
-          <tr class="border-b hover:bg-slate-50 transition">
-            <td class="px-5 py-4">${index + 1}</td>
-            <td class="px-5 py-4 font-semibold text-slate-700">
-              ${item.barang_utama}
-            </td>
-            <td class="px-5 py-4 text-blue-700 font-semibold">
-              ${item.rekomendasi}
-            </td>
-            <td class="px-5 py-4">
-              ${(item.confidence * 100).toFixed(0)}%
-            </td>
-            <td class="px-5 py-4">
-              ${item.lift}
-            </td>
-          </tr>
-        `;
-      });
-    }
-
-    async function searchRecommendations() {
-
-      const keyword = document.getElementById('searchInput').value;
-
-      if (!keyword) {
-        alert('Masukkan nama produk terlebih dahulu!');
-        return;
-      }
-
-      try {
-
-        const response = await fetch(
-          `${API_URL}?product=${encodeURIComponent(keyword)}`
-        );
-
-        const result = await response.json();
-
-        displayTable(result.data);
-
-        if (result.data.length > 0) {
-
-          const bestRecommendation = result.data[0];
-
-          document.getElementById('recommendationCard').classList.remove('hidden');
-
-          // Menggunakan variabel dari backend Flask
-          document.getElementById('barangUtama').innerText =
-            result.barang_dicari || bestRecommendation.barang_utama;
-
-          document.getElementById('barangRekomendasi').innerText =
-            bestRecommendation.rekomendasi;
-
-          document.getElementById('confidenceValue').innerText =
-            (bestRecommendation.confidence * 100).toFixed(0) + '%';
-
-          document.getElementById('liftValue').innerText =
-            bestRecommendation.lift;
-
-          document.getElementById('decisionText').innerText =
-            `Produk "${bestRecommendation.barang_utama}" memiliki hubungan pembelian yang kuat dengan produk "${bestRecommendation.rekomendasi}". Admin dapat mempertimbangkan strategi bundling, promo paket, atau penempatan produk berdekatan untuk meningkatkan penjualan.`;
-
-        } else {
-
-          document.getElementById('recommendationCard').classList.add('hidden');
-
-          alert('Rekomendasi produk tidak ditemukan.');
+            data.forEach((item, index) => {
+                const confPct = (item.confidence * 100).toFixed(0);
+                
+                tableBody.innerHTML += `
+                    <tr class="hover:bg-rose-50/30 transition duration-300 group">
+                        <td class="px-6 py-4 text-gray-400 text-sm">${index + 1}</td>
+                        <td class="px-6 py-4 font-bold text-gray-800 group-hover:text-rose-700 transition">${item.barang_utama}</td>
+                        <td class="px-6 py-4 font-bold text-rose-600">${item.rekomendasi}</td>
+                        <td class="px-6 py-4 text-center">
+                            <span class="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-bold px-2 py-1 rounded-md">
+                                ${confPct}%
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 text-center font-bold text-amber-500">${item.lift.toFixed(2)}</td>
+                    </tr>
+                `;
+            });
         }
 
-      } catch (error) {
-        alert('Terjadi kesalahan saat mengambil data!');
-        console.error(error);
-      }
-    }
+        async function searchRecommendations() {
+            const keyword = document.getElementById('searchInput').value;
 
-    loadAllData();
+            if (!keyword) {
+                alert('Silakan masukkan nama produk terlebih dahulu!');
+                return;
+            }
 
-  </script>
+            try {
+                // Fetch memanggil API dengan query params sesuai route app.py
+                const response = await fetch(`${API_URL}?product=${encodeURIComponent(keyword)}`);
+                if (!response.ok) throw new Error("Gagal mengambil data dari API.");
+                const result = await response.json();
 
+                // Update tabel berdasarkan hasil pencarian
+                displayTable(result.data);
+
+                // Update badge jumlah record
+                const recTotal = result.total_rekomendasi !== undefined ? result.total_rekomendasi : result.data.length;
+                document.getElementById('tableInfo').innerText = `${recTotal} rekomendasi ditemukan`;
+
+                if (result.data && result.data.length > 0) {
+                    const best = result.data[0];
+                    const card = document.getElementById('recommendationCard');
+                    
+                    card.classList.remove('hidden');
+                    // Reset animasi fade-in
+                    card.style.animation = 'none';
+                    card.offsetHeight;
+                    card.style.animation = null; 
+
+                    // Membaca `barang_dicari` dari respon API atau fallback ke payload object
+                    document.getElementById('barangUtama').innerText = result.barang_dicari || best.barang_utama;
+                    document.getElementById('barangRekomendasi').innerText = best.rekomendasi;
+                    
+                    document.getElementById('confidenceValue').innerText = (best.confidence * 100).toFixed(0) + '%';
+                    document.getElementById('liftValue').innerText = best.lift.toFixed(2);
+
+                    document.getElementById('decisionText').innerHTML = `
+                        Berdasarkan riwayat transaksi, <b>${(best.confidence * 100).toFixed(0)}%</b> pelanggan yang membeli <span class="text-rose-300">"${best.barang_utama}"</span> juga cenderung memasukkan <span class="text-rose-300">"${best.rekomendasi}"</span> ke dalam keranjang mereka.<br><br>
+                        Gunakan data ini untuk merancang strategi <em>Bundling Package</em> diskon, atau instruksikan staf toko untuk memajang kedua produk ini secara berdekatan.
+                    `;
+                } else {
+                    document.getElementById('recommendationCard').classList.add('hidden');
+                    alert(`Tidak ada rekomendasi keterkaitan yang kuat untuk produk "${keyword}".`);
+                }
+
+                setApiStatus(true);
+
+            } catch (error) {
+                console.error(error);
+                setApiStatus(false);
+                alert('Terjadi kesalahan saat memproses data rekomendasi dari API.');
+            }
+        }
+
+        function setApiStatus(isOnline) {
+            const dot = document.getElementById('api-status-dot');
+            const text = document.getElementById('api-status-text');
+            if (isOnline) {
+                dot.className = "w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse";
+                text.innerText = "API Terhubung";
+                text.className = "text-xs font-bold text-rose-800";
+            } else {
+                dot.className = "w-2.5 h-2.5 rounded-full bg-red-500";
+                text.innerText = "API Offline";
+                text.className = "text-xs font-bold text-red-600";
+            }
+        }
+
+        // Panggil fetch awal saat load halaman
+        window.addEventListener('DOMContentLoaded', loadAllData);
+    </script>
 </body>
 </html>
